@@ -1,14 +1,36 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
+use std::collections::HashMap;
+
+#[derive(Debug, Eq, PartialEq, Hash, Clone, Copy)]
+struct CellId {
+    pub col: usize,
+    pub row: usize,
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+#[derive(Debug, PartialEq, Clone)]
+pub enum CellValue {
+    Empty,
+    Number(f64),
+    Text(String),
+    Error(String),
+}
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+#[derive(Debug)]
+pub struct Sheet {
+    cells: HashMap<CellId, CellValue>,
+}
+
+impl Sheet {
+    pub fn new() -> Self {
+        Sheet {
+            cells: HashMap::new(),
+        }
+    }
+
+    pub fn set_cell_value(&mut self, col: usize, row: usize, value: CellValue) {
+        self.cells.insert(CellId { col, row }, value);
+    }
+
+    pub fn get_cell_value(&self, col: usize, row: usize) -> Option<&CellValue> {
+        self.cells.get(&CellId { col, row })
     }
 }
